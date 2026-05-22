@@ -1,17 +1,24 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import api from "../api/axios";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser]       = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("trrip_token");
     if (token) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      api.get("/auth/me")
+      api
+        .get("/auth/me")
         .then((r) => setUser(r.data.user))
         .catch(() => localStorage.removeItem("trrip_token"))
         .finally(() => setLoading(false));
@@ -21,7 +28,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = useCallback(async (email, password) => {
-    const { data } = await api.post("/auth/login", { email, password });
+    const { data } = await api.post("/api/auth/login", { email, password });
     localStorage.setItem("trrip_token", data.token);
     api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
     setUser(data.user);
@@ -29,7 +36,11 @@ export function AuthProvider({ children }) {
   }, []);
 
   const register = useCallback(async (name, email, password) => {
-    const { data } = await api.post("/auth/register", { name, email, password });
+    const { data } = await api.post("/auth/register", {
+      name,
+      email,
+      password,
+    });
     localStorage.setItem("trrip_token", data.token);
     api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
     setUser(data.user);
