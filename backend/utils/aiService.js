@@ -20,7 +20,7 @@ function fileToGeminiPart(filePath, mimetype) {
  * Step 1: Extract structured booking data from uploaded documents
  */
 async function extractBookingData(files) {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
   const fileParts = files.map((f) => fileToGeminiPart(f.path, f.mimetype));
 
@@ -74,7 +74,7 @@ Extract as much information as visible. Use null for missing fields.`;
  * Step 2: Generate a day-by-day itinerary from extracted data
  */
 async function generateItinerary(extractedData) {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
   const prompt = `You are an expert travel planner. Based on the following extracted booking information, generate a detailed, practical, and exciting day-by-day travel itinerary.
 
