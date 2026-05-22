@@ -49,7 +49,7 @@ export default function ItineraryPage() {
 
   useEffect(() => {
     api
-      .get(`/api/itineraries/${id}`)
+      .get(`/itineraries/${id}`)
       .then((r) => setItinerary(r.data.itinerary))
       .catch(() => toast.error("Failed to load itinerary"))
       .finally(() => setLoading(false));
