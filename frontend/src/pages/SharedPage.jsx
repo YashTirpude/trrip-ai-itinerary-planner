@@ -44,7 +44,7 @@ export default function SharedPage() {
 
   useEffect(() => {
     api
-      .get(`/api/share/${token}`)
+      .get(`/share/${token}`)
       .then((r) => setItinerary(r.data.itinerary))
       .catch(() => setItinerary(null))
       .finally(() => setLoading(false));
