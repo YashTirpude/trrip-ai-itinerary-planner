@@ -15,6 +15,7 @@ import {
   Bus,
   Activity,
   ArrowLeft,
+  Download,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
@@ -115,20 +116,33 @@ export default function ItineraryPage() {
               </p>
             )}
           </div>
-          <button
-            className={`${styles.shareBtn} ${copied ? styles.copied : ""}`}
-            onClick={copyShareLink}
-          >
-            {copied ? (
-              <>
-                <Check size={16} /> Copied!
-              </>
-            ) : (
-              <>
-                <Share2 size={16} /> Share Trip
-              </>
-            )}
-          </button>
+
+          <div className={styles.headerActions}>
+            <a
+              href={`${import.meta.env.VITE_API_URL}/api/itineraries/${itinerary._id}/pdf`}
+              target="_blank"
+              rel="noreferrer"
+              className={styles.downloadBtn}
+            >
+              <Download size={16} />
+              Download PDF
+            </a>
+
+            <button
+              className={`${styles.shareBtn} ${copied ? styles.copied : ""}`}
+              onClick={copyShareLink}
+            >
+              {copied ? (
+                <>
+                  <Check size={16} /> Copied!
+                </>
+              ) : (
+                <>
+                  <Share2 size={16} /> Share Trip
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Summary */}

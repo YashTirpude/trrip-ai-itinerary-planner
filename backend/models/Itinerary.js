@@ -10,7 +10,10 @@ const daySchema = new mongoose.Schema({
       time: String,
       description: String,
       location: String,
-      type: { type: String, enum: ["flight", "hotel", "activity", "transport", "meal", "other"] },
+      type: {
+        type: String,
+        enum: ["flight", "hotel", "activity", "transport", "meal", "other"],
+      },
     },
   ],
   notes: String,
@@ -36,8 +39,8 @@ const itinerarySchema = new mongoose.Schema(
     endDate: String,
     travelerName: String,
     days: [daySchema],
-    rawSummary: String,        // Full AI-generated markdown summary
-    extractedData: Object,     // Raw extracted booking data
+    rawSummary: String, // Full AI-generated markdown summary
+    extractedData: Object, // Raw extracted booking data
     uploadedFiles: [
       {
         originalName: String,
@@ -47,6 +50,8 @@ const itinerarySchema = new mongoose.Schema(
         path: String,
       },
     ],
+    pdfData: Buffer,
+    pdfContentType: String,
     shareToken: {
       type: String,
       default: () => uuidv4(),
@@ -58,7 +63,7 @@ const itinerarySchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Itinerary", itinerarySchema);

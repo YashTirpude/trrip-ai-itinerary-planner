@@ -1,0 +1,21 @@
+const Itinerary = require("../models/Itinerary");
+exports.downloadPDF = async (req, res, next) => {
+  try {
+    const itinerary = await Itinerary.findById(req.params.id);
+    if (!itinerary || !itinerary.pdfData) {
+      return res.status(404).json({
+        success: false,
+        message: "PDF not found",
+      });
+    }
+
+    res.set({
+      "Content-Type": itinerary.pdfContentType,
+      "Content-Disposition": `attachment; filename="${itinerary.title}.pdf"`,
+    });
+
+    res.send(itinerary.pdfData);
+  } catch (err) {
+    next(err);
+  }
+};

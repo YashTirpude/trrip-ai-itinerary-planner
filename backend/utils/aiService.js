@@ -28,7 +28,15 @@ async function extractBookingData(files) {
 
 Return ONLY a valid JSON object with this structure (no markdown, no explanation, no backticks):
 {
+  
+ "traveler": {
   "travelerName": "string or null",
+  "nationality": "string or null",
+  "nationalityInferred": false
+},
+
+
+  
   "flights": [
     {
       "airline": "string",
@@ -48,6 +56,7 @@ Return ONLY a valid JSON object with this structure (no markdown, no explanation
       "name": "string",
       "city": "string",
       "country": "string",
+     
       "checkIn": "YYYY-MM-DD",
       "checkOut": "YYYY-MM-DD",
       "roomType": "string or null",
@@ -61,6 +70,17 @@ Return ONLY a valid JSON object with this structure (no markdown, no explanation
   "tripStartDate": "YYYY-MM-DD",
   "tripEndDate": "YYYY-MM-DD"
 }
+
+Nationality Extraction Rules:
+  - If nationality is explicitly mentioned in the document, extract it directly.
+  - If nationality is not explicitly available, infer the most likely nationality using contextual clues such as:
+  - departure country
+  - passport information
+  - airline region
+  - traveler details
+  - booking origin
+  - If nationality is inferred instead of directly extracted, set "nationalityInferred" to true.
+  - If nationality cannot reasonably be determined, return null.
 
 Extract as much information as visible. Use null for missing fields.`;
 

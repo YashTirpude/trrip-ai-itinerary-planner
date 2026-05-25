@@ -1,4 +1,5 @@
 const Itinerary = require("../models/Itinerary");
+const generatePDF = require("../utils/pdfGenerator");
 const { extractBookingData, generateItinerary } = require("../utils/aiService");
 const fs = require("fs");
 
@@ -6,7 +7,9 @@ const fs = require("fs");
 exports.generate = async (req, res, next) => {
   try {
     if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ success: false, message: "No files uploaded" });
+      return res
+        .status(400)
+        .json({ success: false, message: "No files uploaded" });
     }
 
     const files = req.files;
@@ -19,7 +22,8 @@ exports.generate = async (req, res, next) => {
       console.error("Extraction error:", err);
       return res.status(422).json({
         success: false,
-        message: "Could not extract booking data from documents. Please ensure they are valid travel documents.",
+        message:
+          "Could not extract booking data from documents. Please ensure they are valid travel documents.",
       });
     }
 
@@ -56,6 +60,13 @@ exports.generate = async (req, res, next) => {
       extractedData,
       uploadedFiles,
     });
+
+    const pdfBuffer = await generatePDF(itinerary);
+
+    itinerary.pdfData = pdfBuffer;
+    itinerary.pdfContentType = "application/pdf";
+
+    await itinerary.save();
 
     res.status(201).json({ success: true, itinerary });
   } catch (err) {
@@ -98,7 +109,9 @@ exports.getOne = async (req, res, next) => {
     });
 
     if (!itinerary) {
-      return res.status(404).json({ success: false, message: "Itinerary not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Itinerary not found" });
     }
 
     res.json({ success: true, itinerary });
@@ -116,7 +129,9 @@ exports.deleteOne = async (req, res, next) => {
     });
 
     if (!itinerary) {
-      return res.status(404).json({ success: false, message: "Itinerary not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Itinerary not found" });
     }
 
     // Delete uploaded files from disk
